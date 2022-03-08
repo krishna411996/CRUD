@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="panel-heading">
+        <div class="panel-title text-center">
+            <h1 class="title">Product System</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form id="login-form" method="post" role="form"
+                                  style="display: block;" th:action="@{/login}">
+                                <h2>LOGIN</h2>
+                                <div th:if="${param.error}">
+                                    <div class="alert alert-danger">Invalid username or
+                                        password.
+                                    </div>
+                                </div>
+                                <div th:if="${param.logout}">
+                                    <div class="alert alert-info">You have been logged out.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="username" name="username" placeholder="Email"
+                                           tabindex="1" type="text" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="password" name="password"
+                                           placeholder="Password" tabindex="2" type="password">
+                                </div>
+                                <div class="col-xs-6 form-group pull-left checkbox">
+                                    <input id="checkbox1" name="remember" type="checkbox">
+                                    <label for="checkbox1">Remember Me</label>
+                                </div>
+                                <div class="col-xs-6 form-group pull-right">
+                                    <input class="form-control btn btn-login" id="login-submit" name="login-submit"
+                                           tabindex="4" type="submit"
+                                           value="Log In">
+                                </div>
+                            </form>
+                            <form id="register-form" method="post"
+                                  style="display: none;" th:action="@{/registration}"
+                                  th:object="${user}">
+
+                                <div th:if="${param.success}">
+                                    <div class="alert alert-info">You've successfully
+                                        registered to our awesome app!
+                                    </div>
+                                </div>
+
+                                <h2>REGISTER</h2>
+                                <p class="error-message" th:each="error : ${#fields.errors('global')}"
+                                   th:if="${#fields.hasGlobalErrors()}"
+                                   th:text="${error}">Validation error</p>
+
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('username')}? 'has-error':''">
+                                    <input class="form-control" id="" placeholder="username"
+                                           th:field="*{username}"/>
+                                    <p class="alert alert-danger"
+                                       th:each="error: ${#fields.errors('username')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                                    <input class="form-control" id="email" placeholder="E-mail"
+                                           th:field="*{email}"/>
+                                    <p class="alert alert-danger"
+                                       th:each="error : ${#fields.errors('email')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                                    <input class="form-control" id="password"
+                                           placeholder="Password" th:field="*{password}" type="password"/>
+                                    <p class="alert alert-danger"
+                                       th:each="error : ${#fields.errors('password')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
+                                    <input class="form-control" id="confirmPassword"
+                                           placeholder="Confirm password" th:field="*{confirmPassword}"
+                                           type="password"/>
+                                    <p class="alert alert-danger"
+                                       th:each="error : ${#fields.errors('confirmPassword')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group"
+                                     th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
+                                    <input id="terms" th:field="*{terms}" type="checkbox"/>   <label
+                                        class="control-label" for="terms"> I agree with the <a
+                                        href="#">terms and conditions</a> for Registration.
+                                </label>
+                                    <p class="alert alert-danger"
+                                       th:each="error : ${#fields.errors('terms')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <input class="form-control btn btn-register" id="register-submit"
+                                                   name="register-submit" tabindex="4"
+                                                   type="submit" value="Register Now">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6 tabs">
+                            <a class="active" href="#" id="login-form-link">
+                                <div class="login">LOGIN</div>
+                            </a>
+                        </div>
+                        <div class="col-xs-6 tabs">
+                            <a href="#" id="register-form-link">
+                                <div class="register">REGISTER</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h6 style="font-size: 14px; font-weight: 100; color: #fff;">
+                Coded with <i class="fa fa-heart red" style="color: #BC0213;"></i>
+                by <a href="http://hashif.com" style="color: #fff;" target="_blank">Hashif</a>
+            </h6>
+        </div>
+    </div>
+</footer>
+</body>
