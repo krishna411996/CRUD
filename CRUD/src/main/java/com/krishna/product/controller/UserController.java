@@ -17,15 +17,15 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
-//, BCryptPasswordEncoder bCryptPasswordEncoder
+    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
         this.userService = userService;
-        //this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/users")
     public void signUp(@RequestBody User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
     }
 }

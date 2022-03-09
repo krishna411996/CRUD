@@ -6,17 +6,16 @@ import java.util.List;
 import com.krishna.product.model.Product;
 import com.krishna.product.service.ProductService;
 import com.krishna.product.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +25,17 @@ public class ProductController {
 
     @Autowired
     private UserService userService;
+
+    public ResponseEntity<List<ProductService>> getAllProduct(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy)
+    {
+        List<ProductService> list = productService.getAllProduct(pageNo, pageSize, sortBy);
+        return new ResponseEntity<List<ProductService>>(list, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    //List<ProductService> list = productService.getAllEmployees(pageNo, pageSize, sortBy);
 
     @GetMapping(path = "/products", produces = "application/json")
     public List<Product> getAllProduct(Authentication authentication) {
@@ -42,6 +52,12 @@ public class ProductController {
         return product;
     }
 
+
+    @GetMapping
+    public Page<Product> getProductList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return productService.findAll(paging);
+    }
     @PostMapping("/products")
     public Product saveProduct(@RequestBody Product newProduct, Authentication authentication) {
         String username = authentication.getName();
